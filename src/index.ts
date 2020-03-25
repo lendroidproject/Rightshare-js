@@ -1,1 +1,2 @@
-export * from './lib/NFT';
+import RightshareJS from './lib/NFT';
+export default RightshareJS;
