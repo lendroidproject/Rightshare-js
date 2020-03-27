@@ -8,12 +8,6 @@ import RightsDao from './ABIs/RightsDaoABI.json';
 import api from './axios';
 import requests from './requests';
 
-const addresses: any = {
-  FRight: '0xFc248D053E8E5F71542c0F4956f0292453393A87',
-  IRight: '0xdb210A5da035d160c7528BeCc349d58156818E7C',
-  RightsDao: '0xa43F7069C723587dedaC7c3c82C2f913a1806ff2'
-};
-
 const call = (method: (...args: any) => any) => (...args: any) =>
   method(...args).call() as Promise<any>;
 const send = (method: (...args: any) => any) => (...args: any) => {
@@ -25,10 +19,12 @@ interface Options {
   readonly apiURL: string;
   readonly apiKey: string;
   readonly onEvent?: (type: string, payload: any, error: any) => void;
+  readonly addresses: any;
 }
 
 export default (provider: any, options: Options) => {
   const instance = new Web3(provider);
+  const { addresses } = options;
   const contracts = {
     FRight: new instance.eth.Contract(FRight as any, addresses.FRight),
     IRight: new instance.eth.Contract(IRight as any, addresses.IRight),
