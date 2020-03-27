@@ -5,6 +5,9 @@ import IRight from './ABIs/IRightABI.json';
 import NFT from './ABIs/NFTABI.json';
 import RightsDao from './ABIs/RightsDaoABI.json';
 
+import api from './axios';
+import requests from './requests';
+
 const addresses: any = {
   FRight: '0xFc248D053E8E5F71542c0F4956f0292453393A87',
   IRight: '0xdb210A5da035d160c7528BeCc349d58156818E7C',
@@ -18,7 +21,13 @@ const send = (method: (...args: any) => any) => (...args: any) => {
   return method(...args).send(option) as Promise<any>;
 };
 
-export default (provider: any) => {
+interface Options {
+  readonly apiURL: string;
+  readonly apiKey: string;
+  readonly onEvent?: (type: string, payload: any, error: any) => void;
+}
+
+export default (provider: any, options: Options) => {
   const instance = new Web3(provider);
   const contracts = {
     FRight: new instance.eth.Contract(FRight as any, addresses.FRight),
@@ -59,8 +68,13 @@ export default (provider: any) => {
     }
   };
 
+  const { request, axios } = api(options.apiKey, options.apiURL);
+  const apis = requests(request);
+
   return {
     addresses,
+    apis,
+    axios,
     contracts,
     methods,
     web3: instance

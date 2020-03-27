@@ -30,7 +30,7 @@
     "__comment__3": "Functional style rules",
     "no-this": true,
     "no-class": true,
-    "no-mixed-interface": true,
+    "no-mixed-interface": false,
     "no-expression-statement": [
       true,
       {
