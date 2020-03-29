@@ -1,3 +1,4 @@
+// tslint:disable no-if-statement
 import Web3 from 'web3';
 
 import FRight from './ABIs/FRightABI.json';
@@ -64,6 +65,53 @@ export default (provider: any, options: Options) => {
     }
   };
 
+  const hasIRight = (addr: string, id: number): Promise<any> => {
+    // tslint:disable-next-line: readonly-array
+    const ret: any[] = [false, 0];
+    // const contract = new instance.eth.Contract(NFT as any, addr);
+
+    return new Promise(resolve => {
+      // tslint:disable-next-line: no-expression-statement
+      contracts.FRight.methods
+        .isFrozen(addr, id)
+        .call()
+        .then((isFrozen: boolean) => {
+          if (!isFrozen) {
+            return resolve(ret);
+          }
+          if (isFrozen) {
+            // tslint:disable-next-line: no-expression-statement
+            contracts.IRight.methods
+              .currentTokenId()
+              .call()
+              .then(async (tokenId: number) => {
+                if (tokenId === 0) {
+                  return resolve(ret);
+                }
+                // tslint:disable-next-line: no-let
+                for (let i = 1; i < tokenId; i++) {
+                  const metadata = await contracts.IRight.methods.metadata(i);
+                  if (
+                    metadata.baseAssetAddress === addr &&
+                    metadata.baseAssetId === id
+                  ) {
+                    // tslint:disable-next-line
+                    ret[0] = true;
+                    // tslint:disable-next-line
+                    ret[1] = Math.max(ret[1], metadata.endTime);
+                  }
+                  if (metadata.isExclusive) {
+                    break;
+                  }
+                }
+                return resolve(ret);
+              });
+          }
+          return resolve(ret);
+        });
+    });
+  };
+
   const { request, axios } = api(options.apiKey, options.apiURL);
   const apis = requests(request);
 
@@ -72,7 +120,10 @@ export default (provider: any, options: Options) => {
     apis,
     axios,
     contracts,
-    methods,
+    methods: {
+      ...methods,
+      hasIRight
+    },
     web3: instance
   };
 };
