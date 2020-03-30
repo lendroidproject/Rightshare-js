@@ -27,65 +27,6 @@ const FRight = [
 
 const IRight = [
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    name: 'metadata',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: 'parentId',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'startTime',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'endTime',
-        type: 'uint256'
-      },
-      {
-        internalType: 'address',
-        name: 'baseAssetAddress',
-        type: 'address'
-      },
-      {
-        internalType: 'uint256',
-        name: 'baseAssetId',
-        type: 'uint256'
-      },
-      {
-        internalType: 'bool',
-        name: 'isExclusive',
-        type: 'bool'
-      },
-      {
-        internalType: 'uint256',
-        name: 'maxISupply',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'serialNumber',
-        type: 'uint256'
-      }
-    ],
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
     inputs: [],
     name: 'currentTokenId',
     outputs: [
@@ -93,6 +34,25 @@ const IRight = [
         internalType: 'uint256',
         name: '',
         type: 'uint256'
+      }
+    ],
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256'
+      }
+    ],
+    name: 'ownerOf',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address'
       }
     ],
     stateMutability: 'view',
@@ -136,8 +96,8 @@ window.addEventListener('load', async () => {
   }
 });
 
-window.hasIRight = (addr, id) => {
-  const ret = [false, 0];
+window.hasIRight = (addr, id, ethAddress) => {
+  const ret = [false, []];
 
   return new Promise(resolve => {
     FRightContract.methods
@@ -148,24 +108,18 @@ window.hasIRight = (addr, id) => {
           return resolve(ret);
         }
         if (isFrozen) {
-          IRightContract.methods
+          return IRightContract.methods
             .currentTokenId()
             .call()
             .then(async tokenId => {
               if (tokenId === 0) {
                 return resolve(ret);
               }
-              for (let i = 1; i < tokenId; i++) {
-                const metadata = await IRightContract.methods.metadata(i);
-                if (
-                  metadata.baseAssetAddress === addr &&
-                  metadata.baseAssetId === id
-                ) {
+              for (let i = 1; i <= tokenId; i++) {
+                const owner = await IRightContract.methods.ownerOf(i).call();
+                if (owner.toLowerCase() === ethAddress.toLowerCase()) {
                   ret[0] = true;
-                  ret[1] = Math.max(ret[1], metadata.endTime);
-                }
-                if (metadata.isExclusive) {
-                  break;
+                  ret[1].push(i);
                 }
               }
               return resolve(ret);

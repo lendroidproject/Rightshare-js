@@ -20,13 +20,16 @@ Javascript library
 | --------- | -------------------- |
 | `address` | NFT contract address |
 | `tokenId` | NFT token ID         |
+| `owner`   | ETH address          |
 
 ## Example
 
 ```javascript
-hasIRight('0xe15e9c0bf6b6b29d3b9e1c921ab2cb09c2194463', 1).then(
-  ([has, expiry]) => {
-    // Do sth with `has` and `expiry`
-  }
-);
+hasIRight(
+  '0x79986aF15539de2db9A5086382daEdA917A9CF0C',
+  1341,
+  '0x8bB37fb0F0462bB3FC8995cf17721f8e4a399629'
+).then(([has, ids]) => {
+  // Do sth with `has` and `expiry`
+});
 ```
