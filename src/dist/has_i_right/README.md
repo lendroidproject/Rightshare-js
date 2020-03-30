@@ -20,3 +20,13 @@ Javascript library
 | --------- | -------------------- |
 | `address` | NFT contract address |
 | `tokenId` | NFT token ID         |
+
+## Example
+
+```javascript
+hasIRight('0xe15e9c0bf6b6b29d3b9e1c921ab2cb09c2194463', 1).then(
+  ([has, expiry]) => {
+    // Do sth with `has` and `expiry`
+  }
+);
+```
