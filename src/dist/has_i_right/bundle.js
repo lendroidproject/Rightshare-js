@@ -43,55 +43,20 @@ const IRight = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '',
+        name: '_tokenId',
         type: 'uint256'
       }
     ],
-    name: 'metadata',
+    name: 'baseAsset',
     outputs: [
       {
-        internalType: 'uint256',
-        name: 'parentId',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'startTime',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'endTime',
-        type: 'uint256'
-      },
-      {
         internalType: 'address',
-        name: 'baseAssetAddress',
+        name: '_baseAssetAddress',
         type: 'address'
       },
       {
         internalType: 'uint256',
-        name: 'baseAssetId',
-        type: 'uint256'
-      },
-      {
-        internalType: 'bool',
-        name: 'isExclusive',
-        type: 'bool'
-      },
-      {
-        internalType: 'uint256',
-        name: 'maxISupply',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'serialNumber',
+        name: '_baseAssetId',
         type: 'uint256'
       }
     ],
@@ -137,10 +102,6 @@ window.addEventListener('load', async () => {
   // Legacy dapp browsers...
   else if (window.web3) {
     window.web3 = new Web3(web3.currentProvider);
-    // Acccounts always exposed
-    web3.eth.sendTransaction({
-      /* ... */
-    });
   }
   // Non-dapp browsers...
   else {
@@ -174,13 +135,15 @@ window.hasIRight = (addr, id, ethAddress) => {
                 const owner = await IRightContract.methods.ownerOf(i).call();
                 if (owner.toLowerCase() === ethAddress.toLowerCase()) {
                   const {
-                    isExclusive,
-                    baseAssetAddress
-                  } = await IRightContract.methods.metadata(i).call();
-                  if (baseAssetAddress.toLowerCase() === addr.toLowerCase()) {
+                    _baseAssetId: assetId,
+                    _baseAssetAddress: baseAssetAddress
+                  } = await IRightContract.methods.baseAsset(i).call();
+                  if (
+                    baseAssetAddress.toLowerCase() === addr.toLowerCase() &&
+                    Number(assetId) === Number(id)
+                  ) {
                     ret[0] = true;
                     ret[1].push(i);
-                    if (isExclusive) break;
                   }
                 }
               }
