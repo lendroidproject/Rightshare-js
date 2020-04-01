@@ -43,20 +43,55 @@ const IRight = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_tokenId',
+        name: '',
         type: 'uint256'
       }
     ],
-    name: 'baseAsset',
+    name: 'metadata',
     outputs: [
       {
+        internalType: 'uint256',
+        name: 'parentId',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'startTime',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'endTime',
+        type: 'uint256'
+      },
+      {
         internalType: 'address',
-        name: '_baseAssetAddress',
+        name: 'baseAssetAddress',
         type: 'address'
       },
       {
         internalType: 'uint256',
-        name: '_baseAssetId',
+        name: 'baseAssetId',
+        type: 'uint256'
+      },
+      {
+        internalType: 'bool',
+        name: 'isExclusive',
+        type: 'bool'
+      },
+      {
+        internalType: 'uint256',
+        name: 'maxISupply',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'serialNumber',
         type: 'uint256'
       }
     ],
@@ -85,8 +120,12 @@ const IRight = [
 ];
 
 const addresses = {
+  // MainNet
   FRight: '0xD923152e96B0f8eDb28a8feC8765D9F8D81a6920',
   IRight: '0xcD8bF9Dd771E93B17e2164698dcB30Cb87D51057'
+  // RinkyBy
+  // FRight: '0xFc248D053E8E5F71542c0F4956f0292453393A87',
+  // IRight: '0xdb210A5da035d160c7528BeCc349d58156818E7C',
 };
 
 window.addEventListener('load', async () => {
@@ -112,7 +151,7 @@ window.addEventListener('load', async () => {
 
   if (window.web3) {
     window.FRightContract = new web3.eth.Contract(FRight, addresses.FRight);
-    window.IRightContract = new web3.eth.Contract(IRight, addresses.FRight);
+    window.IRightContract = new web3.eth.Contract(IRight, addresses.IRight);
   }
 });
 
@@ -135,15 +174,13 @@ window.hasIRight = (addr, id, ethAddress) => {
                 const owner = await IRightContract.methods.ownerOf(i).call();
                 if (owner.toLowerCase() === ethAddress.toLowerCase()) {
                   const {
-                    _baseAssetId: assetId,
-                    _baseAssetAddress: baseAssetAddress
-                  } = await IRightContract.methods.baseAsset(i).call();
-                  if (
-                    baseAssetAddress.toLowerCase() === addr.toLowerCase() &&
-                    Number(assetId) === Number(id)
-                  ) {
+                    isExclusive,
+                    baseAssetAddress
+                  } = await IRightContract.methods.metadata(i).call();
+                  if (baseAssetAddress.toLowerCase() === addr.toLowerCase()) {
                     ret[0] = true;
                     ret[1].push(i);
+                    if (isExclusive) break;
                   }
                 }
               }

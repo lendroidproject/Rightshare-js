@@ -16,12 +16,18 @@
       }
     }, 100)
     function callback() {
-      hasIRight('0x79986aF15539de2db9A5086382daEdA917A9CF0C', 1341, '0x8bB37fb0F0462bB3FC8995cf17721f8e4a399629').then(
+      hasIRight('0x79986aF15539de2db9A5086382daEdA917A9CF0C', 1341, '0xDf2060c211Da692D480AA7E7fBf8f4E7faD45D6B').then(
         ([has, expiry]) => {
           // Do sth with `has` and `expiry`
           console.log(has, expiry)
         }
       );
+      // hasIRight('0x646BB8Aa5FBcE2E2F3d9b2036b6f2025f4d32556', 15, '0x2fcc0f7892538574f05243adD566Eab3922d1eBd').then(
+      //   ([has, expiry]) => {
+      //     // Do sth with `has` and `expiry`
+      //     console.log(has, expiry)
+      //   }
+      // );
     }
   </script>
 </body>
