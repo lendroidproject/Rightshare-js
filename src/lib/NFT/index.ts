@@ -52,10 +52,12 @@ export default (provider: any, options: Options) => {
       }
     },
     RightsDao: {
+      currentFVersion: call(contracts.RightsDao.methods.current_f_version),
+      currentIVersion: call(contracts.RightsDao.methods.current_i_version),
       freeze: send(contracts.RightsDao.methods.freeze),
       issueI: send(contracts.RightsDao.methods.issue_i),
       revokeI: send(contracts.RightsDao.methods.revoke_i),
-      unfreeze: send(contracts.RightsDao.methods.unfreeze)
+      unfreeze: send(contracts.RightsDao.methods.unfreeze),
     },
     addresses: {
       getName: (addr: string) =>
@@ -63,53 +65,6 @@ export default (provider: any, options: Options) => {
           k => addresses[k].toLowerCase() === addr.toLowerCase()
         )
     }
-  };
-
-  const hasIRight = (addr: string, id: number): Promise<any> => {
-    // tslint:disable-next-line: readonly-array
-    const ret: any[] = [false, 0];
-    // const contract = new instance.eth.Contract(NFT as any, addr);
-
-    return new Promise(resolve => {
-      // tslint:disable-next-line: no-expression-statement
-      contracts.FRight.methods
-        .isFrozen(addr, id)
-        .call()
-        .then((isFrozen: boolean) => {
-          if (!isFrozen) {
-            return resolve(ret);
-          }
-          if (isFrozen) {
-            // tslint:disable-next-line: no-expression-statement
-            contracts.IRight.methods
-              .currentTokenId()
-              .call()
-              .then(async (tokenId: number) => {
-                if (tokenId === 0) {
-                  return resolve(ret);
-                }
-                // tslint:disable-next-line: no-let
-                for (let i = 1; i < tokenId; i++) {
-                  const metadata = await contracts.IRight.methods.metadata(i);
-                  if (
-                    metadata.baseAssetAddress === addr &&
-                    metadata.baseAssetId === id
-                  ) {
-                    // tslint:disable-next-line
-                    ret[0] = true;
-                    // tslint:disable-next-line
-                    ret[1] = Math.max(ret[1], metadata.endTime);
-                  }
-                  if (metadata.isExclusive) {
-                    break;
-                  }
-                }
-                return resolve(ret);
-              });
-          }
-          return resolve(ret);
-        });
-    });
   };
 
   const { request, axios } = api(options.apiKey, options.apiURL);
@@ -120,10 +75,7 @@ export default (provider: any, options: Options) => {
     apis,
     axios,
     contracts,
-    methods: {
-      ...methods,
-      hasIRight
-    },
+    methods,
     web3: instance
   };
 };
