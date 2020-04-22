@@ -52,11 +52,11 @@ export default (provider: any, options: Options) => {
       }
     },
     RightsDao: {
-      currentFVersion: call(contracts.RightsDao.methods.current_f_version),
-      currentIVersion: call(contracts.RightsDao.methods.current_i_version),
+      currentFVersion: call(contracts.RightsDao.methods.currentFVersion),
+      currentIVersion: call(contracts.RightsDao.methods.currentIVersion),
       freeze: send(contracts.RightsDao.methods.freeze),
-      issueI: send(contracts.RightsDao.methods.issue_i),
-      revokeI: send(contracts.RightsDao.methods.revoke_i),
+      issueI: send(contracts.RightsDao.methods.issueI),
+      revokeI: send(contracts.RightsDao.methods.revokeI),
       unfreeze: send(contracts.RightsDao.methods.unfreeze),
     },
     addresses: {
