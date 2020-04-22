@@ -35,7 +35,7 @@ export default (provider: any, options: Options) => {
   const methods = {
     FRight: {
       isFrozen: call(contracts.FRight.methods.isFrozen),
-      isIMintAble: call(contracts.FRight.methods.isIMintAble),
+      isIMintable: call(contracts.FRight.methods.isIMintable),
       isUnfreezable: call(contracts.FRight.methods.isUnfreezable),
       metadata: call(contracts.FRight.methods.metadata),
       tokenURI: call(contracts.FRight.methods.tokenURI)
