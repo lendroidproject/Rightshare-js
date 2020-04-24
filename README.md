@@ -8,6 +8,7 @@ This proect is powered by [typescript-starter](https://bitjson.github.io/typescr
 
 ```
 npm i --save rightshare-js
+// or
 yarn add rightshare-js
 ```
 
