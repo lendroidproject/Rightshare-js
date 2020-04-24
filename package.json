@@ -1,13 +1,19 @@
 {
   "name": "rightshare-js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Javascript library for NFT Rightshare",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
   "repository": "https://github.com/lendroidproject/Rightshare-js",
   "license": "MIT",
-  "keywords": ["node.js", "typescript", "library", "web3", "javascript"],
+  "keywords": [
+    "node.js",
+    "typescript",
+    "library",
+    "web3",
+    "javascript"
+  ],
   "scripts": {
     "describe": "npm-scripts-info",
     "build": "run-s clean && run-p build:*",
