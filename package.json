@@ -7,7 +7,7 @@
   "module": "build/module/index.js",
   "repository": "https://github.com/lendroidproject/Rightshare-js",
   "license": "MIT",
-  "keywords": [],
+  "keywords": ["node.js", "typescript", "library", "web3", "javascript"],
   "scripts": {
     "describe": "npm-scripts-info",
     "build": "run-s clean && run-p build:*",

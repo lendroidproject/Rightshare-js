@@ -4,13 +4,30 @@ Javascript library for NFT Rightshare
 
 This proect is powered by [typescript-starter](https://bitjson.github.io/typescript-starter/).
 
+## Installation
+
+```
+npm i --save rightshare-js
+yarn add rightshare-js
+```
+
+## Documentation and Live example
+
+- [Documentation](https://lendroidproject.github.io/Rightshare-documentation/docs/library)
+- [Rinkeby](https://rinkeby-rightshare.lendroid.com/)
+- [Mainnet](https://rightshare.lendroid.com/)
+
+# How to develop?
+
 ## Prerequisites
 
 You will need [Node.js](https://nodejs.org) version 8.9.0 or greater installed on your system.
 
-## How to install?
+## Clone and install
 
 ```shell
+git clone https://github.com/lendroidproject/Rightshare-js.git
+cd Rightshare-js
 npm install
 ```
 
