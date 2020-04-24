@@ -57,7 +57,7 @@ export default (provider: any, options: Options) => {
       freeze: send(contracts.RightsDao.methods.freeze),
       issueI: send(contracts.RightsDao.methods.issueI),
       revokeI: send(contracts.RightsDao.methods.revokeI),
-      unfreeze: send(contracts.RightsDao.methods.unfreeze),
+      unfreeze: send(contracts.RightsDao.methods.unfreeze)
     },
     addresses: {
       getName: (addr: string) =>
