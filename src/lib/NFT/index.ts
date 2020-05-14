@@ -32,8 +32,63 @@ export default (provider: any, options: Options) => {
     RightsDao: new instance.eth.Contract(RightsDao as any, addresses.RightsDao)
   };
 
+  const hasRight = (
+    addr: string,
+    id: number | string,
+    ethAddress: string,
+    moderatorContract: any,
+    tokenContract: any
+  ) => {
+    return new Promise(resolve => {
+      // tslint:disable-next-line: no-expression-statement
+      moderatorContract.methods
+        .isFrozen(addr, id)
+        .call()
+        .then((isFrozen: boolean) => {
+          if (isFrozen) {
+            // tslint:disable-next-line: no-expression-statement
+            tokenContract.methods
+              .currentTokenId()
+              .call()
+              .then(async (tokenId: number) => {
+                if (tokenId !== 0) {
+                  // tslint:disable-next-line: no-let
+                  for (let i = 1; i <= tokenId; i++) {
+                    const owner = await tokenContract.methods.ownerOf(i).call();
+                    if (owner.toLowerCase() === ethAddress.toLowerCase()) {
+                      const {
+                        baseAssetAddress,
+                        baseAssetId,
+                        endTime
+                      } = await tokenContract.methods.metadata(i).call();
+                      if (
+                        baseAssetAddress.toLowerCase() === addr.toLowerCase() &&
+                        baseAssetId === id &&
+                        endTime > Date.now() / 1000
+                      ) {
+                        // tslint:disable-next-line: no-expression-statement
+                        resolve(true);
+                        break;
+                      }
+                    }
+                  }
+                } else {
+                  // tslint:disable-next-line: no-expression-statement
+                  resolve(false);
+                }
+              });
+          } else {
+            // tslint:disable-next-line: no-expression-statement
+            resolve(false);
+          }
+        });
+    });
+  };
+
   const methods = {
     FRight: {
+      hasFRight: (addr: string, id: number | string, ethAddress: string) =>
+        hasRight(addr, id, ethAddress, contracts.FRight, contracts.FRight),
       isFrozen: call(contracts.FRight.methods.isFrozen),
       isIMintable: call(contracts.FRight.methods.isIMintable),
       isUnfreezable: call(contracts.FRight.methods.isUnfreezable),
@@ -41,6 +96,8 @@ export default (provider: any, options: Options) => {
       tokenURI: call(contracts.FRight.methods.tokenURI)
     },
     IRight: {
+      hasIRight: (addr: string, id: number | string, ethAddress: string) =>
+        hasRight(addr, id, ethAddress, contracts.FRight, contracts.IRight),
       metadata: call(contracts.IRight.methods.metadata),
       tokenURI: call(contracts.IRight.methods.tokenURI),
       transfer: send(contracts.IRight.methods.transferFrom)
