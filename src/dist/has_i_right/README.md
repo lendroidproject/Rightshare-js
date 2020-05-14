@@ -11,7 +11,7 @@ Javascript library
 ## Import dist or cdn
 
 ```html
-<script src="./has_i_right.min.js"></script>
+<script src="./has_right.min.js"></script>
 ```
 
 ## How to use?
