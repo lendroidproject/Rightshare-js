@@ -1,5 +1,102 @@
 const FRight = [
   {
+    constant: true,
+    inputs: [],
+    name: 'currentTokenId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256'
+      }
+    ],
+    name: 'ownerOf',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    name: 'metadata',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'version',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'startTime',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'endTime',
+        type: 'uint256'
+      },
+      {
+        internalType: 'address',
+        name: 'baseAssetAddress',
+        type: 'address'
+      },
+      {
+        internalType: 'uint256',
+        name: 'baseAssetId',
+        type: 'uint256'
+      },
+      {
+        internalType: 'bool',
+        name: 'isExclusive',
+        type: 'bool'
+      },
+      {
+        internalType: 'uint256',
+        name: 'maxISupply',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'circulatingISupply',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -155,39 +252,48 @@ window.addEventListener('load', async () => {
   }
 });
 
-window.hasIRight = (addr, id, ethAddress) => {
-  const ret = [false, []];
-
+function hasRight(addr, id, ethAddress, moderatorContract, tokenContract) {
   return new Promise(resolve => {
-    FRightContract.methods
+    moderatorContract.methods
       .isFrozen(addr, id)
       .call()
       .then(isFrozen => {
-        if (!isFrozen) return resolve(ret);
         if (isFrozen) {
-          return IRightContract.methods
+          tokenContract.methods
             .currentTokenId()
             .call()
             .then(async tokenId => {
-              if (tokenId === 0) return resolve(ret);
-              for (let i = 1; i <= tokenId; i++) {
-                const owner = await IRightContract.methods.ownerOf(i).call();
-                if (owner.toLowerCase() === ethAddress.toLowerCase()) {
-                  const {
-                    isExclusive,
-                    baseAssetAddress
-                  } = await IRightContract.methods.metadata(i).call();
-                  if (baseAssetAddress.toLowerCase() === addr.toLowerCase()) {
-                    ret[0] = true;
-                    ret[1].push(i);
-                    if (isExclusive) break;
+              if (tokenId !== 0) {
+                for (let i = 1; i <= tokenId; i++) {
+                  const owner = await tokenContract.methods.ownerOf(i).call();
+                  if (owner.toLowerCase() === ethAddress.toLowerCase()) {
+                    const {
+                      baseAssetAddress,
+                      baseAssetId,
+                      endTime
+                    } = await tokenContract.methods.metadata(i).call();
+                    if (
+                      baseAssetAddress.toLowerCase() === addr.toLowerCase() &&
+                      baseAssetId === id &&
+                      endTime > Date.now() / 1000
+                    ) {
+                      resolve(true);
+                      break;
+                    }
                   }
                 }
+              } else {
+                resolve(false);
               }
-              return resolve(ret);
             });
+        } else {
+          resolve(false);
         }
-        return resolve(ret);
       });
   });
-};
+}
+
+window.hasIRight = (...args) =>
+  hasRight(...args, FRightContract, IRightContract);
+window.hasFRight = (...args) =>
+  hasRight(...args, FRightContract, FRightContract);
