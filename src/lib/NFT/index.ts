@@ -87,6 +87,7 @@ export default (provider: any, options: Options) => {
 
   const methods = {
     FRight: {
+      baseAsset: call(contracts.FRight.methods.baseAsset),
       hasFRight: (addr: string, id: number | string, ethAddress: string) =>
         hasRight(addr, id, ethAddress, contracts.FRight, contracts.FRight),
       isFrozen: call(contracts.FRight.methods.isFrozen),
@@ -96,6 +97,7 @@ export default (provider: any, options: Options) => {
       tokenURI: call(contracts.FRight.methods.tokenURI)
     },
     IRight: {
+      baseAsset: call(contracts.IRight.methods.baseAsset),
       hasIRight: (addr: string, id: number | string, ethAddress: string) =>
         hasRight(addr, id, ethAddress, contracts.FRight, contracts.IRight),
       metadata: call(contracts.IRight.methods.metadata),
