@@ -1,4 +1,6 @@
 // tslint:disable no-if-statement
+// tslint:disable no-object-mutation
+// tslint:disable no-expression-statement
 import Web3 from 'web3';
 
 import FRight from './ABIs/FRightABI.json';
@@ -15,9 +17,10 @@ const send = (method: (...args: any) => any) => (...args: any) => {
   const option = args.pop();
   const transaction = method(...args);
   return {
-    estimate: (): Promise<any> => transaction.estimateGas(option) as Promise<any>,
+    estimate: (): Promise<any> =>
+      transaction.estimateGas(option) as Promise<any>,
     send: (): Promise<any> => transaction.send(option) as Promise<any>,
-    transaction,
+    transaction
   };
 };
 
@@ -128,6 +131,23 @@ export default (provider: any, options: Options) => {
         Object.keys(addresses).find(
           k => addresses[k].toLowerCase() === addr.toLowerCase()
         )
+    },
+    web3: {
+      setProvider: (prov: any) => {
+        instance.setProvider(prov);
+        contracts.FRight = new instance.eth.Contract(
+          FRight as any,
+          addresses.FRight
+        );
+        contracts.IRight = new instance.eth.Contract(
+          IRight as any,
+          addresses.IRight
+        );
+        contracts.RightsDao = new instance.eth.Contract(
+          RightsDao as any,
+          addresses.RightsDao
+        );
+      }
     }
   };
 
