@@ -13,7 +13,12 @@ const call = (method: (...args: any) => any) => (...args: any) =>
   method(...args).call() as Promise<any>;
 const send = (method: (...args: any) => any) => (...args: any) => {
   const option = args.pop();
-  return method(...args).send(option) as Promise<any>;
+  const transaction = method(...args);
+  return {
+    estimate: (): Promise<any> => transaction.estimateGas(option) as Promise<any>,
+    send: (): Promise<any> => transaction.send(option) as Promise<any>,
+    transaction,
+  };
 };
 
 interface Options {
