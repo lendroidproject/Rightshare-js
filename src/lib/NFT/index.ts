@@ -123,6 +123,7 @@ export default (provider: any, options: Options) => {
       currentIVersion: call(contracts.RightsDao.methods.currentIVersion),
       freeze: send(contracts.RightsDao.methods.freeze),
       issueI: send(contracts.RightsDao.methods.issueI),
+      issueUnencumberedI: send(contracts.RightsDao.methods.issueUnencumberedI),
       revokeI: send(contracts.RightsDao.methods.revokeI),
       unfreeze: send(contracts.RightsDao.methods.unfreeze)
     },
