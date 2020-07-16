@@ -1,16 +1,101 @@
 [
 	{
-		"inputs": [],
-		"name": "activateWhitelistedFreeze",
-		"outputs": [],
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "fRightContractAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "iRightContractAddress",
+				"type": "address"
+			}
+		],
 		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "chi",
+		"outputs": [
+			{
+				"internalType": "contract IfreeUpTo",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "int128",
+				"name": "",
+				"type": "int128"
+			}
+		],
+		"name": "contracts",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "int128",
+				"name": "",
+				"type": "int128"
+			}
+		],
+		"name": "currentRightVersions",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
-		"name": "deactivateWhitelistedFreeze",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"name": "discountChiActivated",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -36,9 +121,9 @@
 				"type": "uint256[3]"
 			},
 			{
-				"internalType": "string[3]",
+				"internalType": "string[4]",
 				"name": "stringValues",
-				"type": "string[3]"
+				"type": "string[4]"
 			}
 		],
 		"name": "freeze",
@@ -47,15 +132,14 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "incrementCurrentFVersion",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "incrementCurrentIVersion",
+		"inputs": [
+			{
+				"internalType": "int128",
+				"name": "rightType",
+				"type": "int128"
+			}
+		],
+		"name": "incrementCurrentRightVersion",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -63,19 +147,20 @@
 	{
 		"inputs": [
 			{
-				"internalType": "uint256[3]",
-				"name": "uint256Values",
-				"type": "uint256[3]"
-			},
-			{
-				"internalType": "string[3]",
-				"name": "stringValues",
-				"type": "string[3]"
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
-		"name": "issueI",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"name": "isWhitelisted",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -86,17 +171,17 @@
 				"type": "address"
 			},
 			{
-				"internalType": "uint256[3]",
+				"internalType": "uint256[4]",
 				"name": "uint256Values",
-				"type": "uint256[3]"
+				"type": "uint256[4]"
 			},
 			{
-				"internalType": "string[3]",
+				"internalType": "string[4]",
 				"name": "stringValues",
-				"type": "string[3]"
+				"type": "string[4]"
 			}
 		],
-		"name": "issueUnencumberedI",
+		"name": "issueI",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -138,12 +223,105 @@
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes",
+				"name": "",
+				"type": "bytes"
+			}
+		],
+		"name": "onERC721Received",
+		"outputs": [
+			{
+				"internalType": "bytes4",
+				"name": "",
+				"type": "bytes4"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "iRightId",
 				"type": "uint256"
 			}
 		],
 		"name": "revokeI",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "chiAddress",
+				"type": "address"
+			}
+		],
+		"name": "setChi",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "int128",
+				"name": "rightType",
+				"type": "int128"
+			},
+			{
+				"internalType": "string",
+				"name": "url",
+				"type": "string"
+			}
+		],
+		"name": "setRightApiBaseUrl",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bool",
+				"name": "activate",
+				"type": "bool"
+			}
+		],
+		"name": "toggleDiscountChi",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -169,59 +347,12 @@
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "fRightContractAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "iRightContractAddress",
-				"type": "address"
+				"internalType": "bool",
+				"name": "activate",
+				"type": "bool"
 			}
 		],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipTransferred",
-		"type": "event"
-	},
-	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "int128",
-				"name": "rightType",
-				"type": "int128"
-			},
-			{
-				"internalType": "string",
-				"name": "url",
-				"type": "string"
-			}
-		],
-		"name": "setRightApiBaseUrl",
+		"name": "toggleWhitelistedFreeze",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -250,83 +381,6 @@
 		"name": "unfreeze",
 		"outputs": [],
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "int128",
-				"name": "",
-				"type": "int128"
-			}
-		],
-		"name": "contracts",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "currentFVersion",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "currentIVersion",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "isWhitelisted",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
