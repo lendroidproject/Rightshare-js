@@ -106,10 +106,39 @@ export default (provider: any, options: Options) => {
     },
     IRight: {
       baseAsset: call(contracts.IRight.methods.baseAsset),
+      fetchRights: (ethAddr: string, nftAddr: string, id: number | string) => {
+        return new Promise((resolve, reject) => {
+          call(contracts.IRight.methods.totalNFTRights)(ethAddr, nftAddr, id)
+            .then((totalRights: number) => {
+              return Promise.all(
+                new Array(totalRights).fill(1).map((...args) => {
+                  return new Promise((resolveId, rejectId) => {
+                    call(contracts.IRight.methods.NFTRightByIndex)(
+                      ethAddr,
+                      nftAddr,
+                      id,
+                      args[1]
+                    )
+                      .then((rightId: number) =>
+                        call(contracts.IRight.methods.metadata)(rightId)
+                          .then(resolveId)
+                          .catch(rejectId)
+                      )
+                      .catch(rejectId);
+                  });
+                })
+              )
+                .then(resolve)
+                .catch(reject);
+            })
+            .catch(reject);
+        });
+      },
       hasIRight: (addr: string, id: number | string, ethAddress: string) =>
         hasRight(addr, id, ethAddress, contracts.FRight, contracts.IRight),
       metadata: call(contracts.IRight.methods.metadata),
       tokenURI: call(contracts.IRight.methods.tokenURI),
+      totalNFTRights: call(contracts.IRight.methods.totalNFTRights),
       transfer: send(contracts.IRight.methods.transferFrom)
     },
     NFT: {
