@@ -111,7 +111,7 @@ export default (provider: any, options: Options) => {
           call(contracts.IRight.methods.totalNFTRights)(ethAddr, nftAddr, id)
             .then((totalRights: number) => {
               return Promise.all(
-                new Array(totalRights).fill(1).map((...args) => {
+                new Array(Number(totalRights)).fill(1).map((...args) => {
                   return new Promise((resolveId, rejectId) => {
                     call(contracts.IRight.methods.NFTRightByIndex)(
                       ethAddr,
