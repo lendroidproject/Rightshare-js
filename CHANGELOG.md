@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/lendroidproject/Rightshare-js/compare/v1.0.18...v1.1.0) (2021-05-12)
+
+
+### Features
+
+* versions ([04fbed7](https://github.com/lendroidproject/Rightshare-js/commit/04fbed7cfaaf941dce3e2181cdb0cbed20ea822b))
+
 ### [1.0.18](https://github.com/lendroidproject/Rightshare-js/compare/v1.0.17...v1.0.18) (2021-05-12)
 
 ### [1.0.17](https://github.com/lendroidproject/Rightshare-js/compare/v1.0.16...v1.0.17) (2021-03-26)
